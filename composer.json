@@ -1,0 +1,11 @@
+{
+    "name": "admin/webquest",
+    "autoload": {
+        "psr-4": {
+            "Admin\\Webquest\\": "src/"
+        }
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
