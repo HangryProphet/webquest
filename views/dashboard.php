@@ -1,3 +1,4 @@
+<?php require_once '../controllers/dashboard.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,24 +23,18 @@
             <div class="hover-popup lessons-popup">
                 <div class="popup-header">MY COURSES</div>
                 <div class="course-list">
-                    <div class="course-item">
-                        <div class="course-icon">
-                            <i class="fab fa-html5"></i>
-                        </div>
-                        <span class="course-name">HTML</span>
-                    </div>
-                    <div class="course-item">
-                        <div class="course-icon">
-                            <i class="fab fa-css3-alt"></i>
-                        </div>
-                        <span class="course-name">CSS</span>
-                    </div>
-                    <div class="course-item">
-                        <div class="course-icon">
-                            <i class="fab fa-js"></i>
-                        </div>
-                        <span class="course-name">JavaScript</span>
-                    </div>
+                    <?php if (!empty($userStats['courses'])): ?>
+                        <?php foreach ($userStats['courses'] as $course): ?>
+                            <?php if ($course['enrolled']): ?>
+                                <div class="course-item">
+                                    <div class="course-icon">
+                                        <i class="fab <?php echo htmlspecialchars($course['icon']); ?>"></i>
+                                    </div>
+                                    <span class="course-name"><?php echo htmlspecialchars($course['name']); ?></span>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -48,25 +43,24 @@
         <div class="top-btn-wrapper">
             <button class="top-btn streak-btn">
                 <i class="fas fa-fire"></i>
-                <span class="btn-count">3</span>
+                <span class="btn-count"><?php echo htmlspecialchars($userStats['streak']['current_days']); ?></span>
             </button>
             <div class="hover-popup streak-popup">
                 <div class="popup-header">STREAK SOCIETY</div>
                 <div class="streak-info">
-                    <div class="streak-number">3 day streak</div>
+                    <div class="streak-number"><?php echo htmlspecialchars($userStats['streak']['current_days']); ?> day streak</div>
                     <div class="streak-fire-icon">
                         <i class="fas fa-fire"></i>
                     </div>
                 </div>
-                <div class="streak-timer">3 hours until your streak resets!</div>
+                <div class="streak-timer"><?php echo formatTimeRemaining($userStats['streak']['reset_in_seconds']); ?> until your streak resets!</div>
                 <div class="week-tracker">
-                    <div class="day">S</div>
-                    <div class="day">M</div>
-                    <div class="day">T</div>
-                    <div class="day">W</div>
-                    <div class="day">T</div>
-                    <div class="day active">F</div>
-                    <div class="day">S</div>
+                    <?php 
+                    $days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+                    foreach ($userStats['streak']['weekly_progress'] as $index => $active): 
+                    ?>
+                        <div class="day<?php echo $active ? ' active' : ''; ?>"><?php echo $days[$index]; ?></div>
+                    <?php endforeach; ?>
                 </div>
                 <div class="progress-bar-container">
                     <div class="progress-bar">
@@ -84,18 +78,20 @@
         <div class="top-btn-wrapper">
             <button class="top-btn hearts-btn">
                 <i class="fas fa-heart"></i>
-                <span class="btn-count">10</span>
+                <span class="btn-count"><?php echo htmlspecialchars($userStats['hearts']['current']); ?></span>
             </button>
             <div class="hover-popup hearts-popup">
                 <div class="popup-title">Hearts</div>
                 <div class="hearts-display">
-                    <i class="fas fa-heart filled"></i>
-                    <i class="fas fa-heart filled"></i>
-                    <i class="fas fa-heart filled"></i>
-                    <i class="fas fa-heart filled"></i>
-                    <i class="fas fa-heart empty"></i>
+                    <?php 
+                    $maxHearts = 5; // Display max 5 hearts in UI
+                    $currentHearts = $userStats['hearts']['current'];
+                    for ($i = 0; $i < $maxHearts; $i++): 
+                    ?>
+                        <i class="fas fa-heart <?php echo ($i < $currentHearts) ? 'filled' : 'empty'; ?>"></i>
+                    <?php endfor; ?>
                 </div>
-                <div class="next-heart">Next heart in <span class="heart-timer">2 hours</span></div>
+                <div class="next-heart">Next heart in <span class="heart-timer"><?php echo formatTimeRemaining($userStats['hearts']['next_heart_in_seconds']); ?></span></div>
                 <div class="hearts-message">You still have hearts left! Keep on learning</div>
             </div>
         </div>
@@ -175,40 +171,17 @@
 
         <div class="roadmap-container">
             <div class="roadmap">
-                <!-- Level 1 - Start -->
-                <div class="level-node completed" style="left: 0px; top: 280px;">
-                    <i class="fas fa-play-circle"></i>
-                </div>
-                
-                <!-- Level 2 - Lecture -->
-                <div class="level-node completed" style="left: 180px; top: 150px;">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                </div>
-                
-                <!-- Level 3 - Coding -->
-                <div class="level-node completed" style="left: 360px; top: 80px;">
-                    <i class="fas fa-code"></i>
-                </div>
-                
-                <!-- Level 4 - Designing -->
-                <div class="level-node current" style="left: 540px; top: 180px;">
-                    <i class="fas fa-palette"></i>
-                </div>
-                
-                <!-- Level 5 - Coding -->
-                <div class="level-node locked" style="left: 720px; top: 300px;">
-                    <i class="fas fa-code"></i>
-                </div>
-
-                <!-- Level 6 - Designing -->
-                <div class="level-node locked" style="left: 900px; top: 200px;">
-                    <i class="fas fa-paint-brush"></i>
-                </div>
-
-                <!-- Level 7 - Finish -->
-                <div class="level-node locked" style="left: 1080px; top: 120px;">
-                    <i class="fas fa-flag-checkered"></i>
-                </div>
+                <?php if (!empty($userProgress)): ?>
+                    <?php foreach ($userProgress as $level): ?>
+                        <div class="level-node <?php echo htmlspecialchars($level['status']); ?>" 
+                             style="left: <?php echo htmlspecialchars($level['position']['left']); ?>px; top: <?php echo htmlspecialchars($level['position']['top']); ?>px;"
+                             data-level-id="<?php echo htmlspecialchars($level['level_id']); ?>">
+                            <i class="fas <?php echo getLevelIcon($level['type']); ?>"></i>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p style="text-align: center; color: #888; padding: 50px;">No levels available yet. Start your journey!</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>

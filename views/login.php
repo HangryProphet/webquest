@@ -1,28 +1,10 @@
 <?php
-session_start();
+require_once '../core/functions.php';
+start_session_securely();
 
-// Demo credentials
-define('DEMO_USERNAME', 'user1');
-define('DEMO_PASSWORD', '123');
-
-$error = '';
-$success = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
-    
-    if (empty($username) || empty($password)) {
-        $error = 'Please fill in all fields';
-    } elseif ($username === DEMO_USERNAME && $password === DEMO_PASSWORD) {
-        $_SESSION['user'] = $username;
-        $success = 'Login successful! Welcome back!';
-        // Redirect after 1.5 seconds using meta refresh
-        header("refresh:1.5;url=dashboard.php");
-    } else {
-        $error = 'Invalid username or password';
-    }
-}
+// Retrieve any error or success messages from the session
+$error = get_error();
+$success = get_success();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <h1>Log in</h1>
 
-        <form method="POST" action="">
+        <form method="POST" action="../controllers/auth_login.php">
             <div class="input-group">
                 <i class="fas fa-user input-icon"></i>
                 <input 
@@ -49,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     id="username" 
                     placeholder="Email or username" 
                     autocomplete="username"
-                    class="<?php echo ($error && empty($_POST['username'])) ? 'error' : ''; ?>"
                     value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>"
                 >
             </div>
@@ -62,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     id="password" 
                     placeholder="Password" 
                     autocomplete="current-password"
-                    class="<?php echo ($error && empty($_POST['password'])) ? 'error' : ''; ?>"
                 >
                 <a href="#" class="forgot-link">FORGOT?</a>
             </div>
