@@ -112,9 +112,9 @@
             
             <a href="#" class="menu-item" onclick="closeMenu()">
                 <div class="menu-icon">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-trophy"></i>
                 </div>
-                <span class="menu-text">Leaderboard</span>
+                <span class="menu-text">Achievements</span>
             </a>
 
             <a href="#" class="menu-item" onclick="closeMenu()">

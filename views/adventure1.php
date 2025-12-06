@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($selected === $correct_answer) {
             // Correct answer - move to next question
             $_SESSION['current_question'] = $current_question + 1;
-            header("Location: activity.php");
+            header("Location: adventure1.php");
             exit;
         } else {
             // Wrong answer - decrease hearts
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $_SESSION['current_question'] = $current_question + 1;
-        header("Location: activity.php");
+        header("Location: adventure1.php");
         exit;
     }
 }
@@ -145,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             correctAnswer: '<?php echo $correct_answer; ?>',
             currentHearts: <?php echo $hearts; ?>,
             currentProgress: <?php echo $current_question - 1; ?>, // Progress out of 10 (0-10)
-            redirectUrl: 'activity.php',
+            redirectUrl: 'adventure1.php',
             enemyHP: 10,
             hasEnemy: true,
             correctTitle: 'Awesome!',

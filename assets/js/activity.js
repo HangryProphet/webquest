@@ -321,7 +321,7 @@
             if (config.hasEnemy !== false) {
                 const enemyImage = document.getElementById('enemyImage');
                 if (enemyImage) {
-                    enemyImage.src = '../assets/images/enemies/fox-angry.png';
+                    enemyImage.src = '../assets/img/enemies/fox-angry.png';
                 }
 
                 // Decrease enemy HP
@@ -338,7 +338,7 @@
             if (config.hasEnemy !== false) {
                 const enemyImage = document.getElementById('enemyImage');
                 if (enemyImage) {
-                    enemyImage.src = '../assets/images/enemies/fox-angry.png';
+                    enemyImage.src = '../assets/img/enemies/fox-angry.png';
                 }
 
                 // Decrease enemy HP
